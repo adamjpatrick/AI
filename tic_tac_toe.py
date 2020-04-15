@@ -28,21 +28,21 @@ def analyze_board(virtual_board, player_turn):
             if player_turn == human and game_won(virtual_board, player_turn):
                 return -10
             elif player_turn == computer and game_won(virtual_board, player_turn):
-                return 10
+                return 1000
             else:
                 return 0
     move_score = {}
     if player_turn == 'human':
         for index in find_available_positions(virtual_board):
             move_score['index'] = index
-            move_score['score'] = 100
+            move_score['score'] = 1000000000
             virtual_board[index] = player_turn
             move_score['score'] =  min(move_score['score'], analyze_board(virtual_board, switch_player()))
             return move_score['index']
     else:
         for index in find_available_positions(virtual_board):
             move_score['index'] = index
-            move_score['score'] = -100
+            move_score['score'] = -100000000000
             virtual_board[index] = player_turn
             move_score['score'] =  max(move_score['score'], analyze_board(virtual_board, switch_player()))
             return move_score['index']
@@ -95,19 +95,11 @@ while not game_won(game_board, player_turn):
         virtual_board = list(game_board)
         computer_move = analyze_board(virtual_board, player_turn)
         print('Computer chooses: ' + str(computer_move+1))
-        game_board[computer_move] = player_turn
+        if computer_move in find_available_positions(game_board):
+            game_board[computer_move] = player_turn
         if game_won(game_board, player_turn):
             break
     switch_player()
-#        selected_board_position = ' '
-#        while selected_board_position not in ['1', '2', '3', '4', '5', '6', '7', '8', '9']:
-#            selected_board_position = input('Computer Select your square (1-9):')
-#        print(find_available_positions(game_board))
-#        if int(selected_board_position)-1 in find_available_positions(game_board):
-#            game_board[int(selected_board_position)-1] = player_turn
-#        print(find_available_positions(game_board))
-#        switch_player()
 
-#if game_won(game_board, player_turn):
 print_board(game_board)
 print('Player: ' + player_turn + ' wins!')
